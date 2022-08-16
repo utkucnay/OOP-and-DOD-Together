@@ -9,7 +9,7 @@ class Apartment
 {
 public:
     float light;
-    char* ApartOwnerName = new char[40];
+    char* ApartOwnerName = new char[100];
 
     float apartNumber;
     Apartment(float light , float apartNumber)
@@ -28,8 +28,7 @@ class ApartmentDOD
 {
 public:
     float* light;
-    char* ApartOwnerName = new char[40];
-
+    char* ApartOwnerName = new char[100];
     float apartNumber;
     ApartmentDOD(float* light)
     {
@@ -45,16 +44,16 @@ public:
 class Structure
 {
 public:
-    char* StructureName = new char[30];
-    char* StructureColor = new char[30];
+    char* StructureName = new char[100];
+    char* StructureColor = new char[100];
     Apartment* Apartments = new Apartment[5];
 };
 
 class StructureDOD
 {
 public:
-    char* StructureName = new char[30];
-    char* StructureColor = new char[30];
+    char* StructureName = new char[100];
+    char* StructureColor = new char[100];
     ApartmentDOD* Apartments = new ApartmentDOD[5];
 };
 
@@ -70,7 +69,7 @@ struct ApartLightData
 
 int main() {
     vector<Structure*>* Structures = new vector<Structure*>();
-    int N = 50000;
+    int N = 1000000;
     Structures->resize(N/5);
 
     //OOP
@@ -98,17 +97,15 @@ int main() {
 
     tStart = clock();
 
-    for (int i = 0; i < N; i++)
+    for (int b = 0; b < N / 5; b++)
     {
-        for (auto item : *Structures)
+        for (int i = 0; i < 5; i++)
         {
-            for (int i = 0; i < 5; i++)
-            {
-                item->Apartments[i].light = 5;
-            }
+            Structures->at(b)->Apartments[i].light = 5;
         }
     }
-    printf("Set Light OOP Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
+
+    printf("Set Light OOP Time taken: %.4fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 
     //DOD
     tStart = clock();
@@ -117,6 +114,7 @@ int main() {
     {
         apartLightData->lightData->at(i) = 5;
     }
+
     printf("Set Light DOD Time taken: %.4fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 
     //DOD and OOP together
@@ -131,7 +129,7 @@ int main() {
     {
         StructureDOD* structure = new StructureDOD();
 
-        ApartmentDOD* Apart1 = new ApartmentDOD(&LightData->at(i * 5 ));
+        ApartmentDOD* Apart1 = new ApartmentDOD(&LightData->at(i * 5));
         ApartmentDOD* Apart2 = new ApartmentDOD(&LightData->at(i * 5 + 1));
         ApartmentDOD* Apart3 = new ApartmentDOD(&LightData->at(i * 5 + 2));
         ApartmentDOD* Apart4 = new ApartmentDOD(&LightData->at(i * 5 + 3));
@@ -154,7 +152,7 @@ int main() {
     {
         for (int i = 0; i < 5; i++)
         {
-            *StructuresDOD->at(b)->Apartments[i].light = 5;
+            LightData->at(b * 5 + i) = 5;
         }
     }
     
