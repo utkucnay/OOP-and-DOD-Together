@@ -57,19 +57,25 @@ public:
     ApartmentDOD* Apartments = new ApartmentDOD[5];
 };
 
-struct ApartLightData
+struct ApartNameData {
+    char* ApartOwnerName = new char[100];
+};
+
+struct ApartData
 {
-    ApartLightData(int N)
+    ApartData(int N)
     {
         //we split memory for cache line
-        lightData->resize(N);
+        lights->resize(N);
+        ApartNames->resize(N);
     }
-    vector<float>* lightData = new vector<float>;
+    vector<float>* lights = new vector<float>;
+    vector<ApartNameData>* ApartNames = new vector<ApartNameData>;
 };
 
 int main() {
     vector<Structure*>* Structures = new vector<Structure*>();
-    int N = 1000000;
+    int N = 1000000*2;
     Structures->resize(N/5);
 
     //OOP
@@ -109,10 +115,14 @@ int main() {
 
     //DOD
     tStart = clock();
-    ApartLightData* apartLightData = new ApartLightData(N);
+    ApartData* apartData = new ApartData(N);
+
+    printf("ApartData creater Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
+
+    tStart = clock();
     for (int i = 0; i < N; i++)
     {
-        apartLightData->lightData->at(i) = 5;
+        apartData->lights->at(i) = 5;
     }
 
     printf("Set Light DOD Time taken: %.4fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
@@ -121,19 +131,18 @@ int main() {
     vector<StructureDOD*>* StructuresDOD = new vector<StructureDOD*>();
     StructuresDOD->resize(N / 5);
 
-    vector<float>* LightData = new vector<float>;
-    LightData->resize(N);
+    ApartData* apartDataForOOP = new ApartData(N);
 
     tStart = clock();
     for (int i = 0; i < N / 5; i++)
     {
         StructureDOD* structure = new StructureDOD();
 
-        ApartmentDOD* Apart1 = new ApartmentDOD(&LightData->at(i * 5));
-        ApartmentDOD* Apart2 = new ApartmentDOD(&LightData->at(i * 5 + 1));
-        ApartmentDOD* Apart3 = new ApartmentDOD(&LightData->at(i * 5 + 2));
-        ApartmentDOD* Apart4 = new ApartmentDOD(&LightData->at(i * 5 + 3));
-        ApartmentDOD* Apart5 = new ApartmentDOD(&LightData->at(i * 5 + 4));
+        ApartmentDOD* Apart1 = new ApartmentDOD(&apartDataForOOP->lights->at(i * 5));
+        ApartmentDOD* Apart2 = new ApartmentDOD(&apartDataForOOP->lights->at(i * 5 + 1));
+        ApartmentDOD* Apart3 = new ApartmentDOD(&apartDataForOOP->lights->at(i * 5 + 2));
+        ApartmentDOD* Apart4 = new ApartmentDOD(&apartDataForOOP->lights->at(i * 5 + 3));
+        ApartmentDOD* Apart5 = new ApartmentDOD(&apartDataForOOP->lights->at(i * 5 + 4));
 
         structure->Apartments[0] = *Apart1;
         structure->Apartments[1] = *Apart2;
@@ -150,7 +159,7 @@ int main() {
     
     for (int b = 0; b < N; b++)
     {
-        LightData->at(b) = 5;
+        apartDataForOOP->lights->at(b) = 5;
     }
     
     printf("DOD and OOP together set light Time taken: %.4fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
