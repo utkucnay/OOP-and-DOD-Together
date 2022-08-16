@@ -2,5 +2,6 @@
 
 I create vector light prop and i keep pointer in class so I increase cache hit ratio.
 
-![image](https://user-images.githubusercontent.com/48163717/184927013-d4c1f21e-a2a6-4f01-bab7-24c1be3f78fc.png)
+![image](https://user-images.githubusercontent.com/48163717/184947950-c60cab4a-2e7e-44d3-ba7e-3bcc44909af3.png)
+
 
