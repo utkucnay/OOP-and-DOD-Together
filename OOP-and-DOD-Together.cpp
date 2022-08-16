@@ -148,12 +148,9 @@ int main() {
 
     tStart = clock();
     
-    for (int b = 0; b < N / 5; b++)
+    for (int b = 0; b < N; b++)
     {
-        for (int i = 0; i < 5; i++)
-        {
-            LightData->at(b * 5 + i) = 5;
-        }
+        LightData->at(b) = 5;
     }
     
     printf("DOD and OOP together set light Time taken: %.4fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
